@@ -212,42 +212,47 @@ chmod +x codesec-php2shell-guard.sh
 ```
 
 ```
-   ___ _  _ ___ ___ ___ _  _ ___ _    _       ___ _   _   _   ___ ___ 
-  | _ \ || | _ \_  ) __| || | __| |  | |     / __| | | | /_\ | _ \   \
-  |  _/ __ |  _// / \__ \ __ | _|| |__| |__  | (_ | |_| |/ _ \|   / |) |
-  |_| |_||_|_| /___|___/_||_|___|____|____|  \___|\___//_/ \_\_|_\___/ 
-  ────────────────────────────────────────────────────────────────────────
+  ╔═══════════════════════════════════════════════════════════════════════╗
+  ║   ██████╗ ██╗  ██╗██████╗ ██████╗ ███████╗██╗  ██╗███████╗██╗     ██╗ ║
+  ║   ██╔══██╗██║  ██║██╔══██╗╚════██╗██╔════╝██║  ██║██╔════╝██║     ██║ ║
+  ║   ██████╔╝███████║██████╔╝ █████╔╝███████╗███████║█████╗  ██║     ██║ ║
+  ║   ██╔═══╝ ██╔══██║██╔═══╝ ██╔═══╝ ╚════██║██╔══██║██╔══╝  ██║     ██║ ║
+  ║   ██║     ██║  ██║██║     ███████╗███████║██║  ██║███████╗███████╗██║ ║
+  ║   ╚═╝     ╚═╝  ╚═╝╚═╝     ╚══════╝╚══════╝╚═╝  ╚═╝╚══════╝╚══════╝╚═╝ ║
+  ║               -=[ G  U  A  R  D   ::   D E F E N S E ]=-              ║
+  ╚═══════════════════════════════════════════════════════════════════════╝
+  ─────────────────────────────────────────────────────────────────────────
   CodeSec PHP2Shell Guard v2.2.0  │  CVE-2026-109618 & 109619  │  CVSS 9.2
-  Author: Altaf Pasha  │  https://altafpasha.in  │  @altafpasha_h  │  GitHub: altafpasha
-  ────────────────────────────────────────────────────────────────────────
+  Author: Altaf Pasha  │  https://altafpasha.in  │  @altafpasha_h  │  https://github.com/altafpasha/php2shell-guard
+  ─────────────────────────────────────────────────────────────────────────
 
   Select an option:
 
-  [1]   🖥️   Scan Local System          — Auto-detect & check installed PHP
-  [2]   ⚡  1-Click Auto-Fix Server    — Update PHP & restart web services
-  [3]   🔢  Check Specific Version      — Enter a PHP version manually
-  [4]   📁  Batch Check (File)          — Check multiple versions from file
-  [5]   📊  Generate Reports            — Export results to JSON / CSV
-  [6]   📜  Review PHP Error Log        — Scan logs for crash indicators
-  [7]   🩹  Patch Guidance              — Step-by-step update instructions
-  [8]   🔒  Full Defensive Audit        — System + Logs + Reports + Patch
-  [9]   📋  Patched Versions Reference  — View safe version numbers
-  [10]  ❓  Help & Usage Info           — Show all CLI options
-  [0]   🚪  Exit
+  [01]  [+]  Scan Local System            -- Auto-detect & check installed PHP
+  [02]  [!]  1-Click Auto-Fix Server      -- Update PHP & restart web services
+  [03]  [>]  Check Specific Version       -- Enter a PHP version manually
+  [04]  [#]  Batch Check (File)           -- Check multiple versions from file
+  [05]  [*]  Generate Reports             -- Export results to JSON / CSV
+  [06]  [?]  Review PHP Error Log         -- Scan logs for crash indicators
+  [07]  [~]  Patch Guidance               -- Step-by-step update instructions
+  [08]  [@]  Full Defensive Audit         -- System + Logs + Reports + Patch
+  [09]  [=]  Patched Versions Reference   -- View safe version numbers
+  [10]  [i]  Help & Usage Info            -- Show all CLI options
+  [00]  [x]  Exit
 
-  ────────────────────────────────────────────────────────────────────────
-  ⮞  Enter your choice [0-10]:
+  ─────────────────────────────────────────────────────────────────────────
+  [>] Enter your choice [0-10]: 
 ```
 
 ### ✨ Features of the Interactive Menu
 
-- **⚡ 1-Click Auto-Fix** — Instant server remediation directly from menu option [2] or after scan
-- **🎨 Compact & Clean Design** — Sleek 4-line ASCII banner that fits on any terminal screen
-- **🎯 Color-coded output** — Vulnerable versions in red, safe versions in green
-- **🏷️ Status badges** — Instant visual `✘ VULNERABLE` or `✔ LIKELY FIXED` labels
-- **📊 Guided exports** — The menu walks you through saving JSON/CSV reports
-- **🔄 Loop mode** — Returns to the menu after each action, run multiple checks
-- **📱 Works everywhere** — Linux, macOS, WSL, Docker containers
+- **[!] 1-Click Auto-Fix** — Instant server remediation directly from menu option `[02]` or prompt after scan
+- **Solid Framed Block Banner** — High-definition terminal branding with clean box-drawing frame
+- **Clean Monospaced Badges** — Terminal symbols `[+]`, `[!]`, `[>]`, `[#]`, `[*]`, `[?]` instead of misaligned emojis
+- **Status Badges** — Instant visual `[!] VULNERABLE` or `[+] LIKELY FIXED` labels
+- **Guided Exports** — The menu walks you through saving JSON/CSV reports
+- **Loop Mode** — Returns to the menu after each action, run multiple checks
+- **Works Everywhere** — Linux, macOS, WSL, Docker containers
 
 <details>
 <summary>📋 <strong>What the output looks like (click to expand)</strong></summary>
