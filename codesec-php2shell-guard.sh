@@ -24,6 +24,7 @@ if [[ -t 1 ]]; then
   BLUE='\033[1;34m'
   MAGENTA='\033[1;35m'
   CYAN='\033[1;36m'
+  BLACK='\033[0;30m'
   WHITE='\033[1;37m'
   DIM='\033[2m'
   BOLD='\033[1m'
