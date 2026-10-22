@@ -8,13 +8,17 @@
 
 **One command. Instant visibility. Zero exploitation.**
 
-[![Version](https://img.shields.io/badge/version-2.0.0-blue?style=for-the-badge&logo=semver&logoColor=white)](https://github.com/altafpasha/php2shell-guard/releases)
+[![Version](https://img.shields.io/badge/version-2.1.0-blue?style=for-the-badge&logo=semver&logoColor=white)](https://github.com/altafpasha/php2shell-guard/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green?style=for-the-badge&logo=opensourceinitiative&logoColor=white)](LICENSE)
 [![Shell](https://img.shields.io/badge/Shell-Bash%205%2B-4EAA25?style=for-the-badge&logo=gnubash&logoColor=white)](#requirements)
 [![CVE](https://img.shields.io/badge/CVE--2026--109618-CRITICAL-red?style=for-the-badge&logo=hackthebox&logoColor=white)](#what-is-php2shell)
 [![CVE](https://img.shields.io/badge/CVE--2026--109619-CRITICAL-red?style=for-the-badge&logo=hackthebox&logoColor=white)](#what-is-php2shell)
 [![CVSS](https://img.shields.io/badge/CVSS%20v4.0-9.2%20CRITICAL-darkred?style=for-the-badge&logo=shieldsdotio&logoColor=white)](#what-is-php2shell)
 [![Platform](https://img.shields.io/badge/Platform-Linux%20%7C%20macOS%20%7C%20WSL-informational?style=for-the-badge&logo=linux&logoColor=white)](#requirements)
+
+[![Author](https://img.shields.io/badge/Author-Altaf%20Pasha-purple?style=for-the-badge&logo=github&logoColor=white)](https://github.com/altafpasha)
+[![Website](https://img.shields.io/badge/🌐-altafpasha.in-00C7B7?style=for-the-badge)](https://altafpasha.in)
+[![X Follow](https://img.shields.io/badge/X-@altafpasha__h-000000?style=for-the-badge&logo=x&logoColor=white)](https://x.com/altafpasha_h)
 
 <br>
 
@@ -37,6 +41,7 @@
 - [What is PHP2Shell?](#-what-is-php2shell)
 - [Why You Need This Tool](#-why-you-need-this-tool)
 - [Quick Start — Check Your Server in 30 Seconds](#-quick-start-check-your-server-in-30-seconds)
+- [🎮 Interactive Menu (NEW!)](#-interactive-menu--just-run-it)
 - [Requirements](#-requirements)
 - [Installation](#-installation)
 - [Usage Guide](#-usage-guide)
@@ -154,13 +159,57 @@ cd php2shell-guard
 chmod +x codesec-php2shell-guard.sh
 ```
 
-### Step 3: Scan your system
+### Step 3: Launch the interactive menu
 
 ```bash
-./codesec-php2shell-guard.sh --system
+./codesec-php2shell-guard.sh
 ```
 
-**That's it!** The tool will automatically find your PHP installation and tell you if you're safe. 🎉
+**That's it!** A beautiful interactive menu will appear — just pick a number! 🎉
+
+> 💡 You can also run with flags directly: `./codesec-php2shell-guard.sh --system`
+
+---
+
+## 🎮 Interactive Menu — Just Run It!
+
+> **New in v2.1!** Run the tool without any arguments to get a beautiful interactive menu. No need to memorize flags — just pick a number!
+
+```bash
+./codesec-php2shell-guard.sh
+```
+
+The menu gives you **10 options** to choose from:
+
+```
+  ╔═══════════════════════════════════════════════════════════╗
+  ║                    SELECT AN OPTION                       ║
+  ╠═══════════════════════════════════════════════════════════╣
+  ║                                                           ║
+  ║  [1]  🖥️   Scan Local System                              ║
+  ║  [2]  🔢  Check Specific Version                          ║
+  ║  [3]  📁  Batch Check (File)                              ║
+  ║  [4]  📊  Generate Reports (JSON/CSV)                     ║
+  ║  [5]  📜  Review PHP Error Log                            ║
+  ║  [6]  🩹  Patch Guidance                                  ║
+  ║  [7]  🔒  Full Defensive Audit                            ║
+  ║  [8]  📋  Patched Versions Reference                      ║
+  ║  [9]  ❓  Help & Usage Info                               ║
+  ║  [0]  🚪  Exit                                            ║
+  ║                                                           ║
+  ╚═══════════════════════════════════════════════════════════╝
+
+  ⮞  Enter your choice [0-9]:
+```
+
+### ✨ Features of the Interactive Menu
+
+- **🎨 Color-coded output** — Vulnerable versions in red, safe versions in green
+- **🏷️ Status badges** — Instant visual `✘ VULNERABLE` or `✔ LIKELY FIXED` labels
+- **📊 Guided exports** — The menu walks you through saving JSON/CSV reports
+- **🔄 Loop mode** — Returns to the menu after each action, run multiple checks
+- **🎯 Zero memorization** — No need to remember CLI flags
+- **📱 Works everywhere** — Any terminal that supports ANSI colors
 
 <details>
 <summary>📋 <strong>What the output looks like (click to expand)</strong></summary>
@@ -863,11 +912,27 @@ You are free to use, modify, and distribute this tool for personal, commercial, 
 
 ### 🛡️ Stay Patched. Stay Protected. Stay Vigilant.
 
-**Made with ❤️ for the security community**
+**Made with ❤️ by [Altaf Pasha](https://altafpasha.in) for the security community**
 
 [![Star on GitHub](https://img.shields.io/github/stars/altafpasha/php2shell-guard?style=social)](https://github.com/altafpasha/php2shell-guard)
-[![Follow](https://img.shields.io/twitter/follow/altafpasha?style=social)](https://twitter.com/altafpasha)
+[![Follow on X](https://img.shields.io/badge/Follow-@altafpasha__h-000000?style=social&logo=x)](https://x.com/altafpasha_h)
+[![Website](https://img.shields.io/badge/🌐-altafpasha.in-00C7B7?style=flat)](https://altafpasha.in)
 
 </div>
 
-<!-- SEO: PHP vulnerability scanner, PHP2Shell CVE checker, CVE-2026-109618, CVE-2026-109619, PHP security audit tool, PHP remote code execution checker, PHP RCE vulnerability, PHP version checker, PHP security tool, PHP patch checker, PHP-FPM vulnerability, WordPress security, Laravel security, Drupal security, Joomla security, PHP web shell detection, PHP memory exhaustion exploit, PHP OOM vulnerability, server security audit, penetration testing tools, cybersecurity CLI tools, PHP security hardening, CVSS 9.2 PHP, critical PHP vulnerability 2026, PHP security scanner open source, bash security script, PHP version audit, web server security check, PHP-CGI vulnerability, FrankenPHP security -->
+---
+
+<div align="center">
+
+### 👤 About the Author
+
+| | |
+|---|---|
+| **Name** | Altaf Pasha |
+| **Website** | [altafpasha.in](https://altafpasha.in) |
+| **X (Twitter)** | [@altafpasha_h](https://x.com/altafpasha_h) |
+| **GitHub** | [github.com/altafpasha](https://github.com/altafpasha) |
+
+</div>
+
+<!-- SEO: PHP vulnerability scanner, PHP2Shell CVE checker, CVE-2026-109618, CVE-2026-109619, PHP security audit tool, PHP remote code execution checker, PHP RCE vulnerability, PHP version checker, PHP security tool, PHP patch checker, PHP-FPM vulnerability, WordPress security, Laravel security, Drupal security, Joomla security, PHP web shell detection, PHP memory exhaustion exploit, PHP OOM vulnerability, server security audit, penetration testing tools, cybersecurity CLI tools, PHP security hardening, CVSS 9.2 PHP, critical PHP vulnerability 2026, PHP security scanner open source, bash security script, PHP version audit, web server security check, PHP-CGI vulnerability, FrankenPHP security, altaf pasha, altafpasha -->
