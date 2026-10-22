@@ -8,7 +8,7 @@ set -uo pipefail
 
 # ─── Tool Info ────────────────────────────────────────────────────────────────
 TOOL="CodeSec PHP2Shell Guard"
-VERSION="2.1.0"
+VERSION="2.2.0"
 AUTHOR="Altaf Pasha"
 WEBSITE="https://altafpasha.in"
 TWITTER="@altafpasha_h"
@@ -43,6 +43,8 @@ CSV_OUT=""
 VERSIONS_FILE=""
 LOG_FILE=""
 SYSTEM_MODE=0
+AUTO_FIX=0
+AUTO_YES=0
 SHOW_PATCH=0
 CHECK_PROCESSES=1
 EXIT_CODE=0
@@ -56,55 +58,25 @@ declare -a RESULT_REASONS=()
 declare -a RESULT_FIXED=()
 declare -a LOG_FINDINGS=()
 
-# ─── Banner ───────────────────────────────────────────────────────────────────
+# ─── Banner (Compact & Sleek) ─────────────────────────────────────────────────
 show_banner() {
   echo -e "${CYAN}"
   cat <<'BANNER'
-
-   ██████╗ ██████╗ ██████╗ ███████╗███████╗███████╗ ██████╗
-  ██╔════╝██╔═══██╗██╔══██╗██╔════╝██╔════╝██╔════╝██╔════╝
-  ██║     ██║   ██║██║  ██║█████╗  ███████╗█████╗  ██║
-  ██║     ██║   ██║██║  ██║██╔══╝  ╚════██║██╔══╝  ██║
-  ╚██████╗╚██████╔╝██████╔╝███████╗███████║███████╗╚██████╗
-   ╚═════╝ ╚═════╝ ╚═════╝ ╚══════╝╚══════╝╚══════╝ ╚═════╝
-
+   ___ _  _ ___ ___ ___ _  _ ___ _    _       ___ _   _   _   ___ ___ 
+  | _ \ || | _ \_  ) __| || | __| |  | |     / __| | | | /_\ | _ \   \
+  |  _/ __ |  _// / \__ \ __ | _|| |__| |__  | (_ | |_| |/ _ \|   / |) |
+  |_| |_||_|_| /___|___/_||_|___|____|____|  \___|\___//_/ \_\_|_\___/ 
 BANNER
-  echo -e "${RED}"
-  cat <<'BANNER'
-  ██████╗ ██╗  ██╗██████╗ ██████╗ ███████╗██╗  ██╗███████╗██╗     ██╗
-  ██╔══██╗██║  ██║██╔══██╗╚════██╗██╔════╝██║  ██║██╔════╝██║     ██║
-  ██████╔╝███████║██████╔╝ █████╔╝███████╗███████║█████╗  ██║     ██║
-  ██╔═══╝ ██╔══██║██╔═══╝ ██╔═══╝ ╚════██║██╔══██║██╔══╝  ██║     ██║
-  ██║     ██║  ██║██║     ███████╗███████║██║  ██║███████╗███████╗███████╗
-  ╚═╝     ╚═╝  ╚═╝╚═╝     ╚══════╝╚══════╝╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝
-
-BANNER
-  echo -e "${GREEN}"
-  cat <<'BANNER'
-   ██████╗ ██╗   ██╗ █████╗ ██████╗ ██████╗
-  ██╔════╝ ██║   ██║██╔══██╗██╔══██╗██╔══██╗
-  ██║  ███╗██║   ██║███████║██████╔╝██║  ██║
-  ██║   ██║██║   ██║██╔══██║██╔══██╗██║  ██║
-  ╚██████╔╝╚██████╔╝██║  ██║██║  ██║██████╔╝
-   ╚═════╝  ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝
-
-BANNER
-  echo -e "${RESET}"
-  echo -e "${DIM}  ─────────────────────────────────────────────────────────────${RESET}"
-  echo -e "  ${BOLD}${WHITE}PHP2Shell Guard${RESET} ${DIM}v${VERSION}${RESET}  ${DIM}│${RESET}  ${CYAN}CVE-2026-109618${RESET} ${DIM}&${RESET} ${CYAN}CVE-2026-109619${RESET}"
-  echo -e "  ${DIM}CVSS v4.0: ${RESET}${RED}${BOLD}9.2 CRITICAL${RESET}  ${DIM}│${RESET}  ${GREEN}Defensive Security Tool${RESET}"
-  echo -e "${DIM}  ─────────────────────────────────────────────────────────────${RESET}"
-  echo -e "  ${DIM}Author :${RESET} ${BOLD}${WHITE}${AUTHOR}${RESET}"
-  echo -e "  ${DIM}Web    :${RESET} ${CYAN}${WEBSITE}${RESET}"
-  echo -e "  ${DIM}X      :${RESET} ${BLUE}${TWITTER}${RESET}"
-  echo -e "  ${DIM}GitHub :${RESET} ${MAGENTA}${GITHUB}${RESET}"
-  echo -e "${DIM}  ─────────────────────────────────────────────────────────────${RESET}"
+  echo -e "${RESET}${DIM}  ────────────────────────────────────────────────────────────────────────${RESET}"
+  echo -e "  ${BOLD}${WHITE}CodeSec PHP2Shell Guard${RESET} ${DIM}v${VERSION}${RESET}  ${DIM}│${RESET}  ${CYAN}CVE-2026-109618 & 109619${RESET}  ${DIM}│${RESET}  ${RED}${BOLD}CVSS 9.2${RESET}"
+  echo -e "  ${DIM}Author:${RESET} ${WHITE}${AUTHOR}${RESET}  ${DIM}│${RESET}  ${CYAN}${WEBSITE}${RESET}  ${DIM}│${RESET}  ${BLUE}${TWITTER}${RESET}  ${DIM}│${RESET}  ${MAGENTA}${GITHUB}${RESET}"
+  echo -e "${DIM}  ────────────────────────────────────────────────────────────────────────${RESET}"
   echo
 }
 
 # ─── Separator ────────────────────────────────────────────────────────────────
 separator() {
-  echo -e "${DIM}  ─────────────────────────────────────────────────────────────${RESET}"
+  echo -e "${DIM}  ────────────────────────────────────────────────────────────────────────${RESET}"
 }
 
 # ─── Status Badges ────────────────────────────────────────────────────────────
@@ -125,22 +97,23 @@ status_badge() {
 show_menu() {
   echo -e "  ${BOLD}${WHITE}Select an option:${RESET}"
   echo
-  echo -e "  ${CYAN}${BOLD}[1]${RESET}  🖥️   ${WHITE}Scan Local System${RESET}          ${DIM}— Auto-detect & check installed PHP${RESET}"
-  echo -e "  ${CYAN}${BOLD}[2]${RESET}  🔢  ${WHITE}Check Specific Version${RESET}      ${DIM}— Enter a PHP version manually${RESET}"
-  echo -e "  ${CYAN}${BOLD}[3]${RESET}  📁  ${WHITE}Batch Check (File)${RESET}          ${DIM}— Check multiple versions from file${RESET}"
-  echo -e "  ${CYAN}${BOLD}[4]${RESET}  📊  ${WHITE}Generate Reports${RESET}            ${DIM}— Export results to JSON / CSV${RESET}"
-  echo -e "  ${CYAN}${BOLD}[5]${RESET}  📜  ${WHITE}Review PHP Error Log${RESET}        ${DIM}— Scan logs for crash indicators${RESET}"
-  echo -e "  ${CYAN}${BOLD}[6]${RESET}  🩹  ${WHITE}Patch Guidance${RESET}              ${DIM}— Step-by-step update instructions${RESET}"
-  echo -e "  ${CYAN}${BOLD}[7]${RESET}  🔒  ${WHITE}Full Defensive Audit${RESET}        ${DIM}— System + Logs + Reports + Patch${RESET}"
-  echo -e "  ${CYAN}${BOLD}[8]${RESET}  📋  ${WHITE}Patched Versions Reference${RESET}  ${DIM}— View safe version numbers${RESET}"
-  echo -e "  ${CYAN}${BOLD}[9]${RESET}  ❓  ${WHITE}Help & Usage Info${RESET}           ${DIM}— Show all CLI options${RESET}"
-  echo -e "  ${CYAN}${BOLD}[0]${RESET}  🚪  ${WHITE}Exit${RESET}"
+  echo -e "  ${CYAN}${BOLD}[1]${RESET}   🖥️   ${WHITE}Scan Local System${RESET}          ${DIM}— Auto-detect & check installed PHP${RESET}"
+  echo -e "  ${GREEN}${BOLD}[2]${RESET}   ⚡  ${WHITE}${BOLD}1-Click Auto-Fix Server${RESET}    ${DIM}— Update PHP & restart web services${RESET}"
+  echo -e "  ${CYAN}${BOLD}[3]${RESET}   🔢  ${WHITE}Check Specific Version${RESET}      ${DIM}— Enter a PHP version manually${RESET}"
+  echo -e "  ${CYAN}${BOLD}[4]${RESET}   📁  ${WHITE}Batch Check (File)${RESET}          ${DIM}— Check multiple versions from file${RESET}"
+  echo -e "  ${CYAN}${BOLD}[5]${RESET}   📊  ${WHITE}Generate Reports${RESET}            ${DIM}— Export results to JSON / CSV${RESET}"
+  echo -e "  ${CYAN}${BOLD}[6]${RESET}   📜  ${WHITE}Review PHP Error Log${RESET}        ${DIM}— Scan logs for crash indicators${RESET}"
+  echo -e "  ${CYAN}${BOLD}[7]${RESET}   🩹  ${WHITE}Patch Guidance${RESET}              ${DIM}— Step-by-step update instructions${RESET}"
+  echo -e "  ${CYAN}${BOLD}[8]${RESET}   🔒  ${WHITE}Full Defensive Audit${RESET}        ${DIM}— System + Logs + Reports + Patch${RESET}"
+  echo -e "  ${CYAN}${BOLD}[9]${RESET}   📋  ${WHITE}Patched Versions Reference${RESET}  ${DIM}— View safe version numbers${RESET}"
+  echo -e "  ${CYAN}${BOLD}[10]${RESET}  ❓  ${WHITE}Help & Usage Info${RESET}           ${DIM}— Show all CLI options${RESET}"
+  echo -e "  ${CYAN}${BOLD}[0]${RESET}   🚪  ${WHITE}Exit${RESET}"
   echo
   separator
 }
 
 read_choice() {
-  echo -ne "  ${YELLOW}${BOLD}⮞  Enter your choice [0-9]: ${RESET}"
+  echo -ne "  ${YELLOW}${BOLD}⮞  Enter your choice [0-10]: ${RESET}"
   read -r choice
   echo
 }
@@ -174,6 +147,9 @@ usage() {
   Usage:
     ./codesec-php2shell-guard.sh                         Launch interactive menu
     ./codesec-php2shell-guard.sh --system                Scan local system
+    ./codesec-php2shell-guard.sh --auto-fix              1-Click auto-fix / patch server
+    ./codesec-php2shell-guard.sh --system --auto-fix     Scan system & auto-fix if vulnerable
+    ./codesec-php2shell-guard.sh --auto-fix --yes        Auto-fix unattended (no prompts)
     ./codesec-php2shell-guard.sh --php-version 8.3.35    Check a specific version
     ./codesec-php2shell-guard.sh --versions-file FILE    Check multiple versions
     ./codesec-php2shell-guard.sh --system --json-out F   Export JSON report
@@ -183,6 +159,8 @@ usage() {
 
   Options:
     --system               Inspect locally available PHP CLI and processes
+    --fix, --auto-fix      1-Click auto-upgrade PHP & restart web services
+    -y, --yes              Auto-confirm prompts during remediation
     --php-version VERSION  Check a supplied version
     --versions-file FILE   Check one PHP version per line
     --json-out FILE        Write JSON results
@@ -389,6 +367,279 @@ show_patch_guide() {
   echo -e "  ${DIM}PHP release information: ${PHP_URL}${RESET}"
 }
 
+# ─── 1-Click Server Auto-Fix / Remediation ────────────────────────────────────
+fix_server_php() {
+  local auto_confirm="${1:-0}"
+  echo
+  echo -e "  ${BG_BLUE}${WHITE}${BOLD} ⚡ 1-CLICK SERVER AUTO-FIX & REMEDIATION ⚡ ${RESET}"
+  separator
+  echo -e "  ${WHITE}Automatically detects package manager, upgrades PHP packages to the${RESET}"
+  echo -e "  ${WHITE}latest patched release, and restarts web-servers & PHP-FPM services.${RESET}"
+  separator
+
+  # Determine privilege escalation
+  local SUDO=""
+  if (( EUID != 0 )); then
+    if command -v sudo >/dev/null 2>&1; then
+      SUDO="sudo"
+      echo -e "  ${DIM}Privilege : Running with sudo escalation${RESET}"
+    else
+      echo -e "  ${RED}✘ Error: Root privileges required. Please run as root or install sudo.${RESET}"
+      return 1
+    fi
+  else
+    echo -e "  ${DIM}Privilege : Running as root${RESET}"
+  fi
+
+  # Detect installed PHP CLI version before update
+  local current_php=""
+  if command -v php >/dev/null 2>&1; then
+    current_php="$(php -r 'echo PHP_VERSION;' 2>/dev/null || true)"
+    echo -e "  ${CYAN}Current PHP :${RESET} ${BOLD}${WHITE}${current_php:-Unknown}${RESET}"
+  else
+    echo -e "  ${YELLOW}Current PHP : Not found in PATH${RESET}"
+  fi
+
+  # Detect OS & Package Manager
+  local pm=""
+  if command -v apt-get >/dev/null 2>&1; then
+    pm="apt"
+  elif command -v dnf >/dev/null 2>&1; then
+    pm="dnf"
+  elif command -v yum >/dev/null 2>&1; then
+    pm="yum"
+  elif command -v apk >/dev/null 2>&1; then
+    pm="apk"
+  elif command -v pacman >/dev/null 2>&1; then
+    pm="pacman"
+  elif command -v zypper >/dev/null 2>&1; then
+    pm="zypper"
+  elif command -v brew >/dev/null 2>&1; then
+    pm="brew"
+  fi
+
+  if [[ -z "$pm" ]]; then
+    echo -e "  ${RED}✘ No supported package manager found (apt, dnf, yum, apk, pacman, zypper, brew).${RESET}"
+    echo -e "  ${YELLOW}Please follow manual update instructions using option [7].${RESET}"
+    return 1
+  fi
+
+  echo -e "  ${CYAN}Detected PM :${RESET} ${GREEN}${BOLD}${pm}${RESET}"
+  echo
+
+  # Display planned actions
+  echo -e "  ${BOLD}${WHITE}Planned Remediation Actions:${RESET}"
+  case "$pm" in
+    apt)
+      echo -e "    ${DIM}1.${RESET} Update repo indexes: ${CYAN}${SUDO:+$SUDO }apt-get update${RESET}"
+      echo -e "    ${DIM}2.${RESET} Upgrade PHP: ${CYAN}${SUDO:+$SUDO }apt-get --only-upgrade install -y php php-cli php-fpm php-common${RESET}"
+      echo -e "    ${DIM}3.${RESET} Restart PHP-FPM, Apache2, Nginx, Caddy, LSWS"
+      ;;
+    dnf)
+      echo -e "    ${DIM}1.${RESET} Upgrade PHP: ${CYAN}${SUDO:+$SUDO }dnf upgrade -y php php-cli php-fpm php-common${RESET}"
+      echo -e "    ${DIM}2.${RESET} Restart PHP-FPM, HTTPD, Nginx"
+      ;;
+    yum)
+      echo -e "    ${DIM}1.${RESET} Upgrade PHP: ${CYAN}${SUDO:+$SUDO }yum update -y php php-cli php-fpm php-common${RESET}"
+      echo -e "    ${DIM}2.${RESET} Restart PHP-FPM, HTTPD, Nginx"
+      ;;
+    apk)
+      echo -e "    ${DIM}1.${RESET} Update APK indexes: ${CYAN}${SUDO:+$SUDO }apk update${RESET}"
+      echo -e "    ${DIM}2.${RESET} Upgrade PHP: ${CYAN}${SUDO:+$SUDO }apk upgrade php php-fpm${RESET}"
+      echo -e "    ${DIM}3.${RESET} Restart PHP-FPM"
+      ;;
+    pacman)
+      echo -e "    ${DIM}1.${RESET} Upgrade PHP: ${CYAN}${SUDO:+$SUDO }pacman -Sy --noconfirm php php-fpm${RESET}"
+      echo -e "    ${DIM}2.${RESET} Restart PHP-FPM, HTTPD, Nginx"
+      ;;
+    zypper)
+      echo -e "    ${DIM}1.${RESET} Upgrade PHP: ${CYAN}${SUDO:+$SUDO }zypper update -y php php-fpm${RESET}"
+      echo -e "    ${DIM}2.${RESET} Restart PHP-FPM, Apache2, Nginx"
+      ;;
+    brew)
+      echo -e "    ${DIM}1.${RESET} Upgrade PHP via Homebrew: ${CYAN}brew update && brew upgrade php${RESET}"
+      echo -e "    ${DIM}2.${RESET} Restart PHP services: ${CYAN}brew services restart php${RESET}"
+      ;;
+  esac
+  echo
+
+  # Prompt confirmation unless auto_confirm is enabled
+  if (( ! auto_confirm )); then
+    echo -ne "  ${YELLOW}${BOLD}Proceed with 1-Click Server Patch? [Y/n]: ${RESET}"
+    local ans
+    read -r ans
+    ans="${ans:-y}"
+    if [[ ! "$ans" =~ ^[Yy]$ ]]; then
+      echo -e "  ${YELLOW}Remediation cancelled by user.${RESET}"
+      return 0
+    fi
+  fi
+
+  echo
+  echo -e "  ${BOLD}${CYAN}🚀 Executing server updates...${RESET}"
+  separator
+
+  local update_success=0
+  case "$pm" in
+    apt)
+      echo -e "  ${DIM}▸ Updating package repositories...${RESET}"
+      $SUDO apt-get update -y
+      echo -e "  ${DIM}▸ Upgrading PHP packages...${RESET}"
+      if $SUDO apt-get --only-upgrade install -y php php-cli php-fpm php-common 2>/dev/null || \
+         $SUDO apt-get install -y --only-upgrade 'php*' 2>/dev/null || \
+         $SUDO apt-get upgrade -y php; then
+        update_success=1
+      fi
+      ;;
+    dnf)
+      echo -e "  ${DIM}▸ Upgrading PHP via DNF...${RESET}"
+      if $SUDO dnf upgrade -y php php-cli php-fpm php-common 'php8*' 2>/dev/null || \
+         $SUDO dnf upgrade -y php; then
+        update_success=1
+      fi
+      ;;
+    yum)
+      echo -e "  ${DIM}▸ Upgrading PHP via YUM...${RESET}"
+      if $SUDO yum update -y php php-cli php-fpm php-common 2>/dev/null || \
+         $SUDO yum update -y php; then
+        update_success=1
+      fi
+      ;;
+    apk)
+      echo -e "  ${DIM}▸ Updating APK repos & upgrading PHP...${RESET}"
+      $SUDO apk update
+      if $SUDO apk upgrade 'php*' 2>/dev/null || $SUDO apk upgrade php; then
+        update_success=1
+      fi
+      ;;
+    pacman)
+      echo -e "  ${DIM}▸ Upgrading PHP via Pacman...${RESET}"
+      if $SUDO pacman -Sy --noconfirm php php-fpm; then
+        update_success=1
+      fi
+      ;;
+    zypper)
+      echo -e "  ${DIM}▸ Upgrading PHP via Zypper...${RESET}"
+      if $SUDO zypper update -y php php-fpm; then
+        update_success=1
+      fi
+      ;;
+    brew)
+      echo -e "  ${DIM}▸ Upgrading PHP via Homebrew...${RESET}"
+      brew update
+      if brew upgrade php 2>/dev/null || brew reinstall php; then
+        update_success=1
+      fi
+      ;;
+  esac
+
+  # Restart Web Services and PHP-FPM
+  echo
+  echo -e "  ${BOLD}${CYAN}🔄 Restarting Web Services and PHP-FPM workers...${RESET}"
+  if command -v systemctl >/dev/null 2>&1; then
+    local fpm_services
+    fpm_services=$(systemctl list-units --type=service --state=running --no-legend 2>/dev/null | grep -Eo 'php[0-9.]*-fpm\.service|php-fpm\.service' | sort -u || true)
+    if [[ -n "$fpm_services" ]]; then
+      while IFS= read -r s; do
+        [[ -z "$s" ]] && continue
+        echo -e "    ${DIM}├─${RESET} Restarting $s"
+        $SUDO systemctl restart "$s" 2>/dev/null || true
+      done <<< "$fpm_services"
+    else
+      $SUDO systemctl restart php-fpm 2>/dev/null || true
+    fi
+
+    for srv in apache2 httpd nginx caddy lsws; do
+      if systemctl is-active --quiet "$srv" 2>/dev/null; then
+        echo -e "    ${DIM}├─${RESET} Reloading/Restarting $srv"
+        $SUDO systemctl reload "$srv" 2>/dev/null || $SUDO systemctl restart "$srv" 2>/dev/null || true
+      fi
+    done
+  elif command -v service >/dev/null 2>&1; then
+    $SUDO service php-fpm restart 2>/dev/null || true
+    $SUDO service apache2 reload 2>/dev/null || $SUDO service apache2 restart 2>/dev/null || true
+    $SUDO service nginx reload 2>/dev/null || $SUDO service nginx restart 2>/dev/null || true
+  elif [[ "$pm" == "brew" ]]; then
+    brew services restart php 2>/dev/null || true
+    brew services restart nginx 2>/dev/null || true
+    brew services restart httpd 2>/dev/null || true
+  elif [[ "$pm" == "apk" ]] && command -v rc-service >/dev/null 2>&1; then
+    $SUDO rc-service php-fpm restart 2>/dev/null || true
+    $SUDO rc-service nginx restart 2>/dev/null || true
+    $SUDO rc-service apache2 restart 2>/dev/null || true
+  fi
+  echo -e "    ${DIM}└─${RESET} ${GREEN}Service reload sequence complete.${RESET}"
+
+  # Verification after patch
+  echo
+  separator
+  echo -e "  ${BOLD}${WHITE}🔍 Post-Remediation Verification:${RESET}"
+  local new_php=""
+  if command -v php >/dev/null 2>&1; then
+    new_php="$(php -r 'echo PHP_VERSION;' 2>/dev/null || true)"
+  fi
+
+  if [[ -n "$new_php" ]]; then
+    echo -e "  ${BOLD}${WHITE}Previous PHP Version :${RESET} ${DIM}${current_php:-Unknown}${RESET}"
+    echo -e "  ${BOLD}${WHITE}Current PHP Version  :${RESET} ${CYAN}${BOLD}${new_php}${RESET}"
+
+    local min_fixed=""
+    if [[ "$new_php" =~ ^([0-9]+)\.([0-9]+)\.([0-9]+)$ ]]; then
+      local mj="${BASH_REMATCH[1]}" mn="${BASH_REMATCH[2]}"
+      case "${mj}.${mn}" in
+        8.5) min_fixed="8.5.12" ;;
+        8.4) min_fixed="8.4.27" ;;
+        8.3) min_fixed="8.3.36" ;;
+        8.2) min_fixed="8.2.35" ;;
+      esac
+      if [[ -n "$min_fixed" ]]; then
+        if version_lt "$new_php" "$min_fixed"; then
+          echo -e "  ${BOLD}${WHITE}Security Status      :${RESET} ${BG_YELLOW}${WHITE}${BOLD} ⚠ STILL BELOW THRESHOLD ${RESET}"
+          echo
+          echo -e "  ${YELLOW}⚠ The repository did not supply a patched version yet.${RESET}"
+          echo -e "  ${WHITE}💡 If you are on Ubuntu/Debian, install the Ondřej Surý PPA:${RESET}"
+          echo -e "     ${CYAN}sudo add-apt-repository ppa:ondrej/php && sudo apt update && sudo apt upgrade php${RESET}"
+          echo -e "  ${WHITE}💡 If you are on RHEL/CentOS, enable the Remi repository:${RESET}"
+          echo -e "     ${CYAN}sudo dnf install -y https://rpms.remirepo.net/enterprise/remi-release-\$(rpm -E %rhel).rpm${RESET}"
+        else
+          echo -e "  ${BOLD}${WHITE}Security Status      :${RESET} ${BG_GREEN}${WHITE}${BOLD} ✔ LIKELY FIXED & PROTECTED ${RESET}"
+          echo
+          echo -e "  ${GREEN}${BOLD}🎉 SUCCESS!${RESET} ${WHITE}Server PHP successfully updated to a safe version!${RESET}"
+          echo -e "  ${DIM}PHP2Shell (CVE-2026-109618 & CVE-2026-109619) mitigated on this host.${RESET}"
+        fi
+      else
+        echo -e "  ${BOLD}${WHITE}Security Status      :${RESET} ${BG_BLUE}${WHITE}${BOLD} ? VERIFY VENDOR ${RESET}"
+      fi
+    fi
+  else
+    echo -e "  ${YELLOW}Could not determine post-patch PHP version. Check manually.${RESET}"
+  fi
+  separator
+}
+
+# ─── Check and prompt 1-click auto-fix if vulnerable ──────────────────────────
+check_and_prompt_fix() {
+  local has_vuln=0
+  for st in "${RESULT_STATUSES[@]}"; do
+    if [[ "$st" == "potentially_vulnerable" || "$st" == "unknown_or_legacy" ]]; then
+      has_vuln=1
+      break
+    fi
+  done
+
+  if (( has_vuln )); then
+    echo
+    echo -e "  ${BG_RED}${WHITE}${BOLD} 🚨 VULNERABILITY DETECTED ON THIS SERVER! ${RESET}"
+    echo -e "  ${YELLOW}${BOLD}Would you like to 1-Click Auto-Fix & patch this server now? [Y/n]: ${RESET}"
+    local do_fix
+    read -r do_fix
+    do_fix="${do_fix:-y}"
+    if [[ "$do_fix" =~ ^[Yy]$ ]]; then
+      fix_server_php 1
+    fi
+  fi
+}
+
 # ─── CSV export ──────────────────────────────────────────────────────────────
 write_csv() {
   local outfile="$1"
@@ -504,11 +755,18 @@ run_interactive() {
         SYSTEM_MODE=1
         detect_system_php
         run_assessment
+        check_and_prompt_fix
         show_footer
         prompt_enter
         ;;
 
-      2) # Check Specific Version
+      2|f|F|fix|FIX) # 1-Click Auto-Fix Server
+        fix_server_php 0
+        show_footer
+        prompt_enter
+        ;;
+
+      3) # Check Specific Version
         FOUND_VERSIONS=(); FOUND_SOURCES=()
         RESULT_VERSIONS=(); RESULT_STATUSES=(); RESULT_REASONS=(); RESULT_FIXED=()
         echo -ne "  ${YELLOW}Enter PHP version (e.g. 8.3.35): ${RESET}"
@@ -524,7 +782,7 @@ run_interactive() {
         prompt_enter
         ;;
 
-      3) # Batch Check from File
+      4) # Batch Check from File
         FOUND_VERSIONS=(); FOUND_SOURCES=()
         RESULT_VERSIONS=(); RESULT_STATUSES=(); RESULT_REASONS=(); RESULT_FIXED=()
         echo -ne "  ${YELLOW}Enter path to versions file: ${RESET}"
@@ -539,9 +797,9 @@ run_interactive() {
         prompt_enter
         ;;
 
-      4) # Generate Reports
+      5) # Generate Reports
         if ((${#RESULT_VERSIONS[@]} == 0)); then
-          echo -e "  ${YELLOW}⚠  No results available yet. Run a scan first (option 1, 2, or 3).${RESET}"
+          echo -e "  ${YELLOW}⚠  No results available yet. Run a scan first (option 1, 3, or 8).${RESET}"
         else
           echo -e "  ${BOLD}${WHITE}Export Options:${RESET}"
           echo -e "  ${CYAN}[a]${RESET}  JSON report"
@@ -575,7 +833,7 @@ run_interactive() {
         prompt_enter
         ;;
 
-      5) # Review PHP Error Log
+      6) # Review PHP Error Log
         echo -ne "  ${YELLOW}Enter PHP version for context (e.g. 8.3.35): ${RESET}"
         read -r log_ver
         echo -ne "  ${YELLOW}Enter log file path: ${RESET}"
@@ -596,19 +854,20 @@ run_interactive() {
         prompt_enter
         ;;
 
-      6) # Patch Guidance
+      7) # Patch Guidance
         show_patch_guide
         show_patched_table
         show_footer
         prompt_enter
         ;;
 
-      7) # Full Defensive Audit
+      8) # Full Defensive Audit
         FOUND_VERSIONS=(); FOUND_SOURCES=()
         RESULT_VERSIONS=(); RESULT_STATUSES=(); RESULT_REASONS=(); RESULT_FIXED=()
         SYSTEM_MODE=1
         detect_system_php
         run_assessment
+        check_and_prompt_fix
         echo -ne "\n  ${YELLOW}Enter log file path (or press Enter to skip): ${RESET}"
         read -r audit_log
         [[ -n "$audit_log" ]] && review_log "$audit_log"
@@ -632,19 +891,19 @@ run_interactive() {
         prompt_enter
         ;;
 
-      8) # Patched Versions Reference
+      9) # Patched Versions Reference
         show_patched_table
         show_footer
         prompt_enter
         ;;
 
-      9) # Help
+      10|h|H|help|HELP) # Help
         usage
         show_footer
         prompt_enter
         ;;
 
-      0) # Exit
+      0|q|Q|exit|EXIT) # Exit
         echo -e "  ${GREEN}${BOLD}Thank you for using $TOOL!${RESET}"
         echo -e "  ${DIM}Stay patched. Stay protected. Stay vigilant.${RESET}"
         show_footer
@@ -652,7 +911,7 @@ run_interactive() {
         ;;
 
       *)
-        echo -e "  ${RED}✘ Invalid option. Please enter a number between 0-9.${RESET}"
+        echo -e "  ${RED}✘ Invalid option. Please enter a number between 0-10.${RESET}"
         sleep 1
         ;;
     esac
@@ -672,6 +931,8 @@ fi
 while (($#)); do
   case "$1" in
     --system) SYSTEM_MODE=1; shift ;;
+    --fix|--auto-fix) AUTO_FIX=1; shift ;;
+    -y|--yes) AUTO_YES=1; shift ;;
     --php-version)
       [[ $# -ge 2 ]] || { echo "Missing PHP version"; exit 2; }
       FOUND_VERSIONS+=("$2")
@@ -707,6 +968,12 @@ if (( SYSTEM_MODE )); then
   detect_system_php
 fi
 
+if (( AUTO_FIX && ! SYSTEM_MODE && ${#FOUND_VERSIONS[@]} == 0 )); then
+  fix_server_php "$AUTO_YES"
+  show_footer
+  exit "$EXIT_CODE"
+fi
+
 if ((${#FOUND_VERSIONS[@]} == 0)); then
   echo -e "  ${YELLOW}No PHP versions supplied or detected.${RESET}"
   usage
@@ -714,6 +981,10 @@ if ((${#FOUND_VERSIONS[@]} == 0)); then
 fi
 
 run_assessment
+
+if (( AUTO_FIX )); then
+  check_and_prompt_fix
+fi
 
 if [[ -n "$LOG_FILE" ]]; then
   review_log "$LOG_FILE"

@@ -8,9 +8,10 @@
 
 **One command. Instant visibility. Zero exploitation.**
 
-[![Version](https://img.shields.io/badge/version-2.1.0-blue?style=for-the-badge&logo=semver&logoColor=white)](https://github.com/altafpasha/php2shell-guard/releases)
+[![Version](https://img.shields.io/badge/version-2.2.0-blue?style=for-the-badge&logo=semver&logoColor=white)](https://github.com/altafpasha/php2shell-guard/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green?style=for-the-badge&logo=opensourceinitiative&logoColor=white)](LICENSE)
 [![Shell](https://img.shields.io/badge/Shell-Bash%205%2B-4EAA25?style=for-the-badge&logo=gnubash&logoColor=white)](#requirements)
+[![1-Click Auto-Fix](https://img.shields.io/badge/⚡%20Auto--Fix-1--Click%20Patch-success?style=for-the-badge)](#-1-click-auto-fix--patch-server-new-in-v22)
 [![CVE](https://img.shields.io/badge/CVE--2026--109618-CRITICAL-red?style=for-the-badge&logo=hackthebox&logoColor=white)](#what-is-php2shell)
 [![CVE](https://img.shields.io/badge/CVE--2026--109619-CRITICAL-red?style=for-the-badge&logo=hackthebox&logoColor=white)](#what-is-php2shell)
 [![CVSS](https://img.shields.io/badge/CVSS%20v4.0-9.2%20CRITICAL-darkred?style=for-the-badge&logo=shieldsdotio&logoColor=white)](#what-is-php2shell)
@@ -41,7 +42,8 @@
 - [What is PHP2Shell?](#-what-is-php2shell)
 - [Why You Need This Tool](#-why-you-need-this-tool)
 - [Quick Start — Check Your Server in 30 Seconds](#-quick-start-check-your-server-in-30-seconds)
-- [🎮 Interactive Menu (NEW!)](#-interactive-menu--just-run-it)
+- [⚡ 1-Click Auto-Fix / Server Remediation (NEW in v2.2!)](#-1-click-auto-fix--patch-server-new-in-v22)
+- [🎮 Interactive Menu](#-interactive-menu--just-run-it)
 - [Requirements](#-requirements)
 - [Installation](#-installation)
 - [Usage Guide](#-usage-guide)
@@ -171,45 +173,81 @@ chmod +x codesec-php2shell-guard.sh
 
 ---
 
+## ⚡ 1-Click Auto-Fix & Patch Server (NEW in v2.2!)
+
+> **Vulnerable PHP detected on your server? Fix it in 1 click!** No need to remember complex package commands or manually restart background PHP-FPM workers.
+
+### 🌟 How It Works:
+1. **Detects your OS & Package Manager** (`apt-get`, `dnf`, `yum`, `apk`, `pacman`, `zypper`, or `brew`)
+2. **Upgrades PHP packages** to the latest safe release directly from verified upstream repos
+3. **Gracefully restarts services** (`php-fpm`, `apache2`, `httpd`, `nginx`, `caddy`, `lsws`)
+4. **Verifies post-patch security** and confirms your server is protected against CVE-2026-109618 & CVE-2026-109619!
+
+```bash
+# 1-Click Auto-Fix in terminal:
+./codesec-php2shell-guard.sh --auto-fix
+
+# Or scan and auto-fix if vulnerable:
+./codesec-php2shell-guard.sh --system --auto-fix
+
+# Unattended / non-interactive (CI/CD, crons, Ansible):
+./codesec-php2shell-guard.sh --auto-fix --yes
+```
+
+> 💡 **In the Interactive Menu:** Whenever a scan detects vulnerable PHP, the tool automatically asks:
+> ```
+> 🚨 VULNERABILITY DETECTED ON THIS SERVER!
+> ⚡ Would you like to 1-Click Auto-Fix & patch this server now? [Y/n]: 
+> ```
+> Just press **Enter** (default is Yes) to patch and restart services instantly!
+
+---
+
 ## 🎮 Interactive Menu — Just Run It!
 
-> **New in v2.1!** Run the tool without any arguments to get a beautiful interactive menu. No need to memorize flags — just pick a number!
+> **Run the tool without arguments** to open the interactive menu with sleek compact branding:
 
 ```bash
 ./codesec-php2shell-guard.sh
 ```
 
-The menu gives you **10 options** to choose from:
-
 ```
-  ╔═══════════════════════════════════════════════════════════╗
-  ║                    SELECT AN OPTION                       ║
-  ╠═══════════════════════════════════════════════════════════╣
-  ║                                                           ║
-  ║  [1]  🖥️   Scan Local System                              ║
-  ║  [2]  🔢  Check Specific Version                          ║
-  ║  [3]  📁  Batch Check (File)                              ║
-  ║  [4]  📊  Generate Reports (JSON/CSV)                     ║
-  ║  [5]  📜  Review PHP Error Log                            ║
-  ║  [6]  🩹  Patch Guidance                                  ║
-  ║  [7]  🔒  Full Defensive Audit                            ║
-  ║  [8]  📋  Patched Versions Reference                      ║
-  ║  [9]  ❓  Help & Usage Info                               ║
-  ║  [0]  🚪  Exit                                            ║
-  ║                                                           ║
-  ╚═══════════════════════════════════════════════════════════╝
+   ___ _  _ ___ ___ ___ _  _ ___ _    _       ___ _   _   _   ___ ___ 
+  | _ \ || | _ \_  ) __| || | __| |  | |     / __| | | | /_\ | _ \   \
+  |  _/ __ |  _// / \__ \ __ | _|| |__| |__  | (_ | |_| |/ _ \|   / |) |
+  |_| |_||_|_| /___|___/_||_|___|____|____|  \___|\___//_/ \_\_|_\___/ 
+  ────────────────────────────────────────────────────────────────────────
+  CodeSec PHP2Shell Guard v2.2.0  │  CVE-2026-109618 & 109619  │  CVSS 9.2
+  Author: Altaf Pasha  │  https://altafpasha.in  │  @altafpasha_h  │  GitHub: altafpasha
+  ────────────────────────────────────────────────────────────────────────
 
-  ⮞  Enter your choice [0-9]:
+  Select an option:
+
+  [1]   🖥️   Scan Local System          — Auto-detect & check installed PHP
+  [2]   ⚡  1-Click Auto-Fix Server    — Update PHP & restart web services
+  [3]   🔢  Check Specific Version      — Enter a PHP version manually
+  [4]   📁  Batch Check (File)          — Check multiple versions from file
+  [5]   📊  Generate Reports            — Export results to JSON / CSV
+  [6]   📜  Review PHP Error Log        — Scan logs for crash indicators
+  [7]   🩹  Patch Guidance              — Step-by-step update instructions
+  [8]   🔒  Full Defensive Audit        — System + Logs + Reports + Patch
+  [9]   📋  Patched Versions Reference  — View safe version numbers
+  [10]  ❓  Help & Usage Info           — Show all CLI options
+  [0]   🚪  Exit
+
+  ────────────────────────────────────────────────────────────────────────
+  ⮞  Enter your choice [0-10]:
 ```
 
 ### ✨ Features of the Interactive Menu
 
-- **🎨 Color-coded output** — Vulnerable versions in red, safe versions in green
+- **⚡ 1-Click Auto-Fix** — Instant server remediation directly from menu option [2] or after scan
+- **🎨 Compact & Clean Design** — Sleek 4-line ASCII banner that fits on any terminal screen
+- **🎯 Color-coded output** — Vulnerable versions in red, safe versions in green
 - **🏷️ Status badges** — Instant visual `✘ VULNERABLE` or `✔ LIKELY FIXED` labels
 - **📊 Guided exports** — The menu walks you through saving JSON/CSV reports
 - **🔄 Loop mode** — Returns to the menu after each action, run multiple checks
-- **🎯 Zero memorization** — No need to remember CLI flags
-- **📱 Works everywhere** — Any terminal that supports ANSI colors
+- **📱 Works everywhere** — Linux, macOS, WSL, Docker containers
 
 <details>
 <summary>📋 <strong>What the output looks like (click to expand)</strong></summary>
@@ -620,6 +658,8 @@ Usage:
 
 Options:
   --system                 Auto-detect and check the local PHP installation
+  --fix, --auto-fix        1-Click auto-upgrade PHP & restart web services
+  -y, --yes                Auto-confirm prompts during remediation (headless)
   --php-version VERSION    Manually check a specific PHP version string
   --versions-file FILE     Check multiple PHP versions from a text file
   --json-out FILE          Export results as a JSON file
@@ -725,9 +765,8 @@ It's a read-only diagnostic script.
 <details>
 <summary><strong>🤔 Do I need root/sudo access?</strong></summary>
 
-**No** for basic usage. You only need `sudo` if:
-- Your PHP log files are owned by root (for `--log-file`)
-- Your PHP binary is not in a standard `PATH` location
+- **For scanning & auditing:** No. Standard user permissions are sufficient to check PHP versions and run diagnostic commands.
+- **For 1-Click Auto-Fix (`--auto-fix`):** Yes. The script will automatically escalate with `sudo` (or run natively if already `root`) to update system packages and reload web-server/PHP-FPM services.
 </details>
 
 <details>
